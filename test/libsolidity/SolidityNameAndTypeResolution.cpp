@@ -1102,7 +1102,7 @@ BOOST_AUTO_TEST_CASE(struct_accessor_one_array_only)
 			Data public data;
 		}
 	)";
-	CHECK_ERROR(sourceCode, TypeError, "Internal type is not allowed for public state variables.");
+	CHECK_ERROR(sourceCode, TypeError, "Internal or recursive type is not allowed for public state variables.");
 }
 
 BOOST_AUTO_TEST_CASE(base_class_state_variable_internal_member)
@@ -4893,7 +4893,7 @@ BOOST_AUTO_TEST_CASE(internal_function_as_external_parameter)
 			}
 		}
 	)";
-	CHECK_ERROR(text, TypeError, "Internal type is not allowed for public or external functions.");
+	CHECK_ERROR(text, TypeError, "Internal or recursive type is not allowed for public or external functions.");
 }
 
 BOOST_AUTO_TEST_CASE(internal_function_returned_from_public_function)
@@ -4905,7 +4905,7 @@ BOOST_AUTO_TEST_CASE(internal_function_returned_from_public_function)
 			}
 		}
 	)";
-	CHECK_ERROR(text, TypeError, "Internal type is not allowed for public or external functions.");
+	CHECK_ERROR(text, TypeError, "Internal or recursive type is not allowed for public or external functions.");
 }
 
 BOOST_AUTO_TEST_CASE(internal_function_as_external_parameter_in_library_internal)
@@ -4927,7 +4927,7 @@ BOOST_AUTO_TEST_CASE(internal_function_as_external_parameter_in_library_external
 			}
 		}
 	)";
-	CHECK_ERROR(text, TypeError, "Internal type is not allowed for public or external functions.");
+	CHECK_ERROR(text, TypeError, "Internal or recursive type is not allowed for public or external functions.");
 }
 
 BOOST_AUTO_TEST_CASE(function_type_arrays)
