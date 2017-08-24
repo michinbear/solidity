@@ -48,8 +48,6 @@ using TypePointers = std::vector<TypePointer>;
 class ABIFunctions
 {
 public:
-	~ABIFunctions();
-
 	/// @returns assembly code block to ABI-encode values of @a _givenTypes residing on the stack
 	/// into memory, converting the types to @a _targetTypes on the fly.
 	/// Assumed variables to be present: <$value0> <$value1> ... <$value(n-1)> <$headStart>
@@ -117,6 +115,13 @@ private:
 	std::string abiEncodingFunctionCompactStorageArray(
 		ArrayType const& _givenType,
 		ArrayType const& _targetType,
+		bool _encodeAsLibraryTypes
+	);
+
+	/// Part of @a abiEncodingFunction for struct types.
+	std::string abiEncodingFunctionStruct(
+		StructType const& _givenType,
+		StructType const& _targetType,
 		bool _encodeAsLibraryTypes
 	);
 
