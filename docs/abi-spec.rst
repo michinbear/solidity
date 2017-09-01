@@ -294,7 +294,7 @@ A function description is a JSON object with the fields:
 - `inputs`: an array of objects, each of which contains:
   * `name`: the name of the parameter;
   * `type`: the canonical type of the parameter (more below).
-  * `components`: used for tuple types (more below).
+  * `components`: used for struct types (more below).
 - `outputs`: an array of objects similar to `inputs`, can be omitted if function doesn't return anything;
 - `payable`: `true` if function accepts ether, defaults to `false`;
 - `stateMutability`: a string with one of the following values: `pure` (:ref:`specified to not read blockchain state <pure-functions>`), `view` (:ref:`specified to not modify the blockchain state <view-functions>`), `nonpayable` and `payable` (same as `payable` above).
@@ -313,7 +313,7 @@ An event description is a JSON object with fairly similar fields:
 - `inputs`: an array of objects, each of which contains:
   * `name`: the name of the parameter;
   * `type`: the canonical type of the parameter.
-  * `components`: used for tuple types (more below).
+  * `components`: used for struct types (more below).
   * `indexed`: `true` if the field is part of the log's topics, `false` if it one of the log's data segment.
 - `anonymous`: `true` if the event was declared as `anonymous`.
 
@@ -358,7 +358,8 @@ the json structure gets arbitrarily nested in the following way:
 
 An object with members ``name``, ``type`` and potentially ``components`` describes a typed variable.
 The canonical type is determined until a struct type is reached and the string description up
-to that point is stored in ``type``, i.e. it will be a sequence of ``[]`` and ``[k]`` with
+to that point is stored in ``type`` prefix with the word ``struct``, i.e. it will be ``struct`` followed by
+a sequence of ``[]`` and ``[k]`` with
 integers ``k``. The components of the struct are then stored in the member ``components``,
 which is of array type and has the same structure as the top-level object except that
 ``indexed`` is not allowed there.
@@ -384,7 +385,7 @@ would result in the JSON:
       "inputs": [
         {
           "name": "s",
-          "type": "",
+          "type": "struct",
           "components": [
             {
               "name": "a",
@@ -396,7 +397,7 @@ would result in the JSON:
             },
             {
               "name": "c",
-              "type": "[]",
+              "type": "struct[]",
               "components": [
                 {
                   "name": "x",
@@ -412,7 +413,7 @@ would result in the JSON:
         },
         {
           "name": "t",
-          "type": "",
+          "type": "struct",
           "components": [
             {
               "name": "x",
