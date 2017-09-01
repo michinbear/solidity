@@ -325,6 +325,16 @@ void ContractCompiler::appendCalldataUnpacker(TypePointers const& _typeParameter
 {
 	// We do not check the calldata size, everything is zero-padded
 
+	TODO: What about external functions?
+	if (m_context.experimentalFeatureActive(ExperimentalFeature::ABIEncoderV2))
+	{
+		// Use the new JULIA-based decoding function
+		auto stackHeightBefore = m_context.stackHeight();
+		abiDecode(_typeParameters, _fromMemory);
+		solAssert(stackHeightBefore - m_context.stackHeight() == sizeOnStack(_givenTypes), "");
+		return;
+	}
+
 	//@todo this does not yet support nested dynamic arrays
 
 	// Retain the offset pointer as base_offset, the point from which the data offsets are computed.
