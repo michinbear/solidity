@@ -39,7 +39,7 @@ source code (e.g. `pragma once <https://en.wikipedia.org/wiki/Pragma_once>`_).
 
 A contract in the sense of Solidity is a collection of code (its *functions*) and
 data (its *state*) that resides at a specific address on the Ethereum
-blockchain. The line ``uint storedData;`` declares a state variable called ``storedData`` of
+블록체인. The line ``uint storedData;`` declares a state variable called ``storedData`` of
 type ``uint`` (unsigned integer of 256 bits). You can think of it as a single slot
 in a database that can be queried and altered by calling functions of the
 code that manages the database. In the case of Ethereum, this is always the owning
@@ -54,7 +54,7 @@ built by Ethereum) apart from allowing anyone to store a single number that is a
 anyone in the world without a (feasible) way to prevent you from publishing
 this number. Of course, anyone could just call ``set`` again with a different value
 and overwrite your number, but the number will still be stored in the history
-of the blockchain. Later, we will see how you can impose access restrictions
+of the 블록체인. Later, we will see how you can impose access restrictions
 so that only you can alter the number.
 
 .. note::
@@ -157,7 +157,7 @@ single account.
 The line ``event Sent(address from, address to, uint amount);`` declares
 a so-called "event" which is fired in the last line of the function
 ``send``. User interfaces (as well as server applications of course) can
-listen for those events being fired on the blockchain without much
+listen for those events being fired on the 블록체인 without much
 cost. As soon as it is fired, the listener will also receive the
 arguments ``from``, ``to`` and ``amount``, which makes it easy to track
 transactions. In order to listen for this event, you would use ::
@@ -182,7 +182,7 @@ The special function ``Coin`` is the
 constructor which is run during creation of the contract and
 cannot be called afterwards. It permanently stores the address of the person creating the
 contract: ``msg`` (together with ``tx`` and ``block``) is a magic global variable that
-contains some properties which allow access to the blockchain. ``msg.sender`` is
+contains some properties which allow access to the 블록체인. ``msg.sender`` is
 always the address where the current (external) function call came from.
 
 Finally, the functions that will actually end up with the contract and can be called
@@ -191,71 +191,60 @@ If ``mint`` is called by anyone except the account that created the contract,
 nothing will happen. On the other hand, ``send`` can be used by anyone (who already
 has some of these coins) to send coins to anyone else. Note that if you use
 this contract to send coins to an address, you will not see anything when you
-look at that address on a blockchain explorer, because the fact that you sent
+look at that address on a 블록체인 explorer, because the fact that you sent
 coins and the changed balances are only stored in the data storage of this
 particular coin contract. By the use of events it is relatively easy to create
-a "blockchain explorer" that tracks transactions and balances of your new coin.
+a "블록체인 explorer" that tracks transactions and balances of your new coin.
 
-.. _blockchain-basics:
+.. _블록체인-basics:
 
 *****************
-Blockchain Basics
+블록체인 기초
 *****************
 
-Blockchains as a concept are not too hard to understand for programmers. The reason is that
-most of the complications (mining, `hashing <https://en.wikipedia.org/wiki/Cryptographic_hash_function>`_, `elliptic-curve cryptography <https://en.wikipedia.org/wiki/Elliptic_curve_cryptography>`_, `peer-to-peer networks <https://en.wikipedia.org/wiki/Peer-to-peer>`_, etc.)
-are just there to provide a certain set of features and promises. Once you accept these
-features as given, you do not have to worry about the underlying technology - or do you have
-to know how Amazon's AWS works internally in order to use it?
+블록체인이라는 개념은 프로그래머가 이해하기에는 어렵지 않다. 왜냐하면 대부분의 complications (mining, `hashing <https://en.wikipedia.org/wiki/Cryptographic_hash_function>`_, `elliptic-curve cryptography <https://en.wikipedia.org/wiki/Elliptic_curve_cryptography>`_, `peer-to-peer networks <https://en.wikipedia.org/wiki/Peer-to-peer>`_, etc.) 들은 기능과 약속들의 집합을 제공하기 위한 것 뿐이기 때문이다. 
+여러분이 이런 기능들을 받아들이기만 한다면, 그 밑에 깔린 기술에 대해서는 신경쓰지 않아도 무방하다. 아니면 당신은 아마존의 AWS를 사용하기 위해서 그것이 내부적으로 어떻게 동작하는지 알아야만 속이 풀리나?
 
 .. index:: transaction
 
-Transactions
+트랜잭션
 ============
 
-A blockchain is a globally shared, transactional database.
-This means that everyone can read entries in the database just by participating in the network.
-If you want to change something in the database, you have to create a so-called transaction
-which has to be accepted by all others.
-The word transaction implies that the change you want to make (assume you want to change
-two values at the same time) is either not done at all or completely applied. Furthermore,
-while your transaction is applied to the database, no other transaction can alter it.
+블록체인은 글로벌하게 공유되는 장부 데이터베이스이다.
+그 말은 네트워크에 참여하는 아무나 데이터베이스의 entry들을 읽을 수 있다는 뜻이다.
+당신이 데이터베이스의 뭔가를 수정하려면 다른 모두가 납득할 수 있는 트랜잭션을 생성해야만 한다.
+트랜잭션이란 당신이 의도한 변화 또는 수정 ( 아마도 당신은 한번에 두가지 값을 변화시키고 싶을 것이다. )이 전혀 이루어지지 않거나, 완벽하게 수행된다는 것을 내포한다.
+게다가, 그 트랜잭션이 데이터베이스에 적용되는 동안 다른 트랜잭션으로 바꿔치기 될 수 없다.
 
-As an example, imagine a table that lists the balances of all accounts in an
-electronic currency. If a transfer from one account to another is requested,
-the transactional nature of the database ensures that if the amount is
-subtracted from one account, it is always added to the other account. If due
-to whatever reason, adding the amount to the target account is not possible,
-the source account is also not modified.
+예를 들어서 전자화폐의 모든 계좌의 잔고 목록을 상상해보라.
+만약 한 계좌에서 다른 계좌로 이체를 요청했다면, 데이터베이스의 트랜잭션은 한 계정에서는 잔고를 줄였다면, 다른 계좌에서는 잔고를 늘리는 것을 보장한다.
+어떤 이유에서든지, 이체 계좌의 잔고를 늘리는 것이 불가능 하다면, 송금 계좌의 잔고 또한변함이 없어야한다.
 
-Furthermore, a transaction is always cryptographically signed by the sender (creator).
-This makes it straightforward to guard access to specific modifications of the
-database. In the example of the electronic currency, a simple check ensures that
-only the person holding the keys to the account can transfer money from it.
+게다가 트랜잭션은 트랜잭션 생성자, 송신측에 의해 항상 서명된다. 이것이 데이터베이스의 변조를 막는다(This makes it straightforward to guard access to specific modifications of the
+database.)
+전자화폐의 예에서 단순한 검증만으로도 계좌의 키를 가지고 있는 사람만이 돈을 이체할 수 있도록 보장한다. 
 
 .. index:: ! block
 
-Blocks
+블록
 ======
 
-One major obstacle to overcome is what, in Bitcoin terms, is called a "double-spend attack":
-What happens if two transactions exist in the network that both want to empty an account,
-a so-called conflict?
+비트코인에서 한가지 장애물은 대체 "중복 결제 공격 ( double-spend attack )"이 뭐냐는 것이다.:
+동일한 네트워크에서 계정을 비워버리라는 두개의 트랜잭션이 존재할 때, 즉 충돌할 때 대체 무슨 일이 벌어지는가.
 
-The abstract answer to this is that you do not have to care. An order of the transactions
-will be selected for you, the transactions will be bundled into what is called a "block"
-and then they will be executed and distributed among all participating nodes.
-If two transactions contradict each other, the one that ends up being second will
-be rejected and not become part of the block.
+간단한 대답은 여러분은 그것을 신경쓸 필요 없다는 것이다. 트랜잭션 순서는 여러분을 위해 선택되어, 해당 트랜잭션은 "블록"으로 감싸지고 모든 참여자 노드에서 실행되고 배포될 것이다. 
+2개의 트랜잭션이 충돌한다면 두번째 트랜잭션은 거절되고 블록에 포함되지 않을 것이다.(If two transactions contradict each other, the one that ends up being second will
+be rejected and not become part of the block.)
 
-These blocks form a linear sequence in time and that is where the word "blockchain"
-derives from. Blocks are added to the chain in rather regular intervals - for
-Ethereum this is roughly every 17 seconds.
+이 블록들은 시간이 지남에 따라 사슬처럼 연쇄적으로 연결되고, 이것이 블록체인이라고 부르는 이유다.
+블록은 일정 간격 ( 이더리움에서는 대충 17초마다 )마다 체인에 추가된다.
 
+채굴이라고 불리는 "order selection mechanism"에서는 
 As part of the "order selection mechanism" (which is called "mining") it may happen that
-blocks are reverted from time to time, but only at the "tip" of the chain. The more
-blocks that are added on top, the less likely it is. So it might be that your transactions
-are reverted and even removed from the blockchain, but the longer you wait, the less
+blocks are reverted from time to time, but only at the "tip" of the chain. 
+
+The more blocks that are added on top, the less likely it is. So it might be that your transactions
+are reverted and even removed from the 블록체인, but the longer you wait, the less
 likely it will be.
 
 
@@ -264,43 +253,30 @@ likely it will be.
 .. index:: !evm, ! ethereum virtual machine
 
 ****************************
-The Ethereum Virtual Machine
+이더리움 가상 머신
 ****************************
 
-Overview
+개요
 ========
 
-The Ethereum Virtual Machine or EVM is the runtime environment
-for smart contracts in Ethereum. It is not only sandboxed but
-actually completely isolated, which means that code running
-inside the EVM has no access to network, filesystem or other processes.
-Smart contracts even have limited access to other smart contracts.
+이더리움 가상머신 ( EVM )은 이더리움의 스마트 컨트랙트를 위한 실행환경이다.
+이것은 샌드박스일 뿐만 아니라 실제로 완벽하게 격리되어 있어서 EVM내부에서 실행되는 코드는 네트워크, 파일시스템, 다른 프로세스로 접근할 수 없다.
+스마트 컨트랙트는 다른 스마트 컨트랙트로의 접근도 제한되어 있다.
 
 .. index:: ! account, address, storage, balance
 
 Accounts
 ========
 
-There are two kinds of accounts in Ethereum which share the same
-address space: **External accounts** that are controlled by
-public-private key pairs (i.e. humans) and **contract accounts** which are
-controlled by the code stored together with the account.
+이더리움에서는 Address 항목을 공유하는 두가지 종류의 계정이 있다. : **External accounts**는 공개키-개인키 쌍 ( 예를 들어 인간 )에 의해 제어되고, **contract accounts**는 계정 내부에 들어있는 코드에 의해서 제어된다.
 
-The address of an external account is determined from
-the public key while the address of a contract is
-determined at the time the contract is created
-(it is derived from the creator address and the number
-of transactions sent from that address, the so-called "nonce").
+외부 계정의 주소는 공개키로 정해지는 데 반해 계약 계정의 주소는 계약이 생성될 때 정해진다. ( 이것은 생성자의주소와 그 주소로부터 발생한 트랜잭션의 횟수 - nonce - 에 의해 정해진다 )
 
-Regardless of whether or not the account stores code, the two types are
-treated equally by the EVM.
+계정이 코드를 가지고 있던 그렇지 않던지 간에, EVM에서는 동일하게 다뤄진다.
 
-Every account has a persistent key-value store mapping 256-bit words to 256-bit
-words called **storage**.
+모든 계정은 **storage**라고 불리는 영구적인 256비트 words를 256비트 words로 맵핑하는 키-값 저장소를 가진다.
 
-Furthermore, every account has a **balance** in
-Ether (in "Wei" to be exact) which can be modified by sending transactions that
-include Ether.
+게다가 모든 계정은 이더를 포함하는 트랜잭션을 보낼 때 수정될 수 있는 **balance** ( 이더, 정확히는 Wei )를 가지고 있다.
 
 .. index:: ! transaction
 
@@ -445,10 +421,10 @@ It is possible to store data in a specially indexed data structure
 that maps all the way up to the block level. This feature called **logs**
 is used by Solidity in order to implement **events**.
 Contracts cannot access log data after it has been created, but they
-can be efficiently accessed from outside the blockchain.
+can be efficiently accessed from outside the 블록체인.
 Since some part of the log data is stored in `bloom filters <https://en.wikipedia.org/wiki/Bloom_filter>`_, it is
 possible to search for this data in an efficient and cryptographically
-secure way, so network peers that do not download the whole blockchain
+secure way, so network peers that do not download the whole 블록체인
 ("light clients") can still find these logs.
 
 .. index:: contract creation
@@ -467,7 +443,7 @@ receives the address of the new contract on the stack.
 Self-destruct
 =============
 
-The only possibility that code is removed from the blockchain is
+The only possibility that code is removed from the 블록체인 is
 when a contract at that address performs the ``selfdestruct`` operation.
 The remaining Ether stored at that address is sent to a designated
 target and then the storage and code is removed from the state.
