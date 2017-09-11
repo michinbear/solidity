@@ -268,7 +268,7 @@ likely it will be.
 Accounts
 ========
 
-이더리움에서는 Address 항목을 공유하는 두가지 종류의 계정이 있다. : **External accounts**는 공개키-개인키 쌍 ( 예를 들어 인간 )에 의해 제어되고, **contract accounts**는 계정 내부에 들어있는 코드에 의해서 제어된다.
+이더리움에서는 Address 항목을 공유하는 두가지 종류의 계정이 있다. : **External accounts** 는 공개키-개인키 쌍 ( 예를 들어 인간 )에 의해 제어되고, **contract accounts**는 계정 내부에 들어있는 코드에 의해서 제어된다.
 외부 계정의 주소는 공개키로 정해지는 데 반해 계약 계정의 주소는 계약이 생성될 때 정해진다. ( 이것은 생성자의주소와 그 주소로부터 발생한 트랜잭션의 횟수 - nonce - 에 의해 정해진다 )
 계정이 코드를 가지고 있던 그렇지 않던지 간에, EVM에서는 동일하게 다뤄진다.
 모든 계정은 **storage**라고 불리는 영구적인 256비트 words를 256비트 words로 맵핑하는 키-값 저장소를 가진다.
@@ -283,8 +283,8 @@ Transactions
 
 만약 받는 계정이 코드를 포함하고 있다면 그 코드가 실행되고 payload는 입력 데이터로 제공된다.
 
-만약 받는 계정이 주소가 ``0``인 zero-account라면 트랜잭션은 **신규 컨트랙트**를 생성한다.
-이미 언급한 것 처럼, 그 컨트랙트의 주소는 ``0``이 아니고, 송신자와 트랜잭션이 보내진 횟수("nonce")로 정해진다.
+만약 받는 계정이 주소가 ``0`` 인 zero-account라면 트랜잭션은 **신규 컨트랙트**를 생성한다.
+이미 언급한 것 처럼, 그 컨트랙트의 주소는 ``0`` 이 아니고, 송신자와 트랜잭션이 보내진 횟수("nonce")로 정해진다.
 이런 컨트랙트 생성을 위한 트랜잭션의 payload는 EVM 코드로 변환되고 실행된다.
 실행 결과는 컨트랙트의 코드로 영구히 저장된다.
 즉, 컨트랙트를 생성하기 위해서, 여러분은 컨트랙트의 실제 코드를 보내는 것이 아니라 실제 코드를 반환하는 코드를 보내는 것이다.
@@ -306,7 +306,7 @@ Gas
 Upon creation, each transaction is charged with a certain amount of gas, whose purpose is to limit the amount of work that is needed to execute the transaction and to pay for this execution. While the EVM executes the transaction, the gas is gradually depleted according to specific rules.
 
 
-**gas price**는 ``gas_price * gas``를 송신 계정으로부터 선금으로 지불해야 하는 트랜잭션 생성자에 의해 정해진다.(?)
+**gas price**는 ``gas_price * gas`` 를 송신 계정으로부터 선금으로 지불해야 하는 트랜잭션 생성자에 의해 정해진다.(?)
 만약 실행 이후에 gas가 남아있다면 동일한 방식으로 환불된다.
 The gas price is a value set by the creator of the transaction, who has to pay gas_price * gas up front from the sending account. If some gas is left after the execution, it is refunded in the same way.
 
@@ -322,94 +322,132 @@ Storage, Memory and the Stack
 각 계정은 **storage** 라는 영구 메모리 영역을 가진다. Storage는 256-bit words에서 256-bit words로 매핑되는 Key-value 쌍을 저장한다.
 컨트랙트 내부에서 storage 데이터를 하나하나 열거하는 것은 불가능하며,
 컨트랙트는 외부 storage를 읽거나 쓸 수 없다.
-Each account has a persistent memory area which is called **storage**.
-Storage is a key-value store that maps 256-bit words to 256-bit words.
-It is not possible to enumerate storage from within a contract
-and it is comparatively costly to read and even more so, to modify
-storage. A contract can neither read nor write to any storage apart
-from its own.
+.. Each account has a persistent memory area which is called **storage**.
+.. Storage is a key-value store that maps 256-bit words to 256-bit words.
+.. It is not possible to enumerate storage from within a contract
+.. and it is comparatively costly to read and even more so, to modify
+.. storage. A contract can neither read nor write to any storage apart
+.. from its own.
 
 두번째 메모리 영역은 **memory**인데, 컨트랙트는 각 메세지 호출마다 초기화된 memory 인스턴스를 얻어온다.
 Memory는 연속적이며 (선형적이며) 바이트 레벨의 주소를 가지지만 쓰기가 8 bit 혹은 256 bit로 가능한데 반해, 읽기는 256 bit 단위로만 가능하다.
-The second memory area is called **memory**, of which a contract obtains
-a freshly cleared instance for each message call. Memory is linear and can be
-addressed at byte level, but reads are limited to a width of 256 bits, while writes
-can be either 8 bits or 256 bits wide. Memory is expanded by a word (256-bit), when
-accessing (either reading or writing) a previously untouched memory word (ie. any offset
-within a word). At the time of expansion, the cost in gas must be paid. Memory is more
-costly the larger it grows (it scales quadratically).
+Memory는 예전에 접근한 적 없는 memory word ( 256-bit )에 접근할 때 word(256-bit) 단위로 확장된다.
+메모리 영역을 과장할 때 가스 비용을 내야한다. 메모리는 커질 수록 비싸진다. (quadratically하게 비싸진다.)
 
-The EVM is not a register machine but a stack machine, so all
-computations are performed on an area called the **stack**. It has a maximum size of
-1024 elements and contains words of 256 bits. Access to the stack is
-limited to the top end in the following way:
-It is possible to copy one of
-the topmost 16 elements to the top of the stack or swap the
-topmost element with one of the 16 elements below it.
-All other operations take the topmost two (or one, or more, depending on
-the operation) elements from the stack and push the result onto the stack.
-Of course it is possible to move stack elements to storage or memory,
-but it is not possible to just access arbitrary elements deeper in the stack
-without first removing the top of the stack.
+.. The second memory area is called **memory**, of which a contract obtains
+.. a freshly cleared instance for each message call. Memory is linear and can be
+.. addressed at byte level, but reads are limited to a width of 256 bits, while writes
+.. can be either 8 bits or 256 bits wide. Memory is expanded by a word (256-bit), when
+.. accessing (either reading or writing) a previously untouched memory word (ie. any offset
+.. within a word). At the time of expansion, the cost in gas must be paid. Memory is more
+.. costly the larger it grows (it scales quadratically).
+
+EVM은 register 머신이 아니라 stack 머신이므로 모든 계산은 **stack**이라고 불리는 영역에서 이뤄진다.
+**stack**의 최대 사이즈는 1024 elements이며 256 bits의 word를 포함한다. stack은 아래와 같은 방법으로
+최상위에만 접근할 수 있다.:
+stack의 최상위 16 elements 중 하나를 복사하거나 최상위 element를 그 아래 16개 element 중 하나와 교체하는 것이 가능하다.
+다른 모든 operation은 최상위 2개 ( 혹은 하나, 혹은 그 이상. opration에 따라 다르다.) elements를 꺼내고 그 결과를 stack위에 쌓는다.
+물론 stack의 element를 storage나 memory에 옮기는 것도 가능하지만 스택의 최상위 요소를 제거하지 않고는 임의 접근이 불가능하다.
+
+.. The EVM is not a register machine but a stack machine, so all
+.. computations are performed on an area called the **stack**. It has a maximum size of
+.. 1024 elements and contains words of 256 bits. Access to the stack is
+.. limited to the top end in the following way:
+.. It is possible to copy one of
+.. the topmost 16 elements to the top of the stack or swap the
+.. topmost element with one of the 16 elements below it.
+.. All other operations take the topmost two (or one, or more, depending on
+.. the operation) elements from the stack and push the result onto the stack.
+.. Of course it is possible to move stack elements to storage or memory,
+.. but it is not possible to just access arbitrary elements deeper in the stack
+.. without first removing the top of the stack.
 
 .. index:: ! instruction
 
 Instruction Set
 ===============
 
-The instruction set of the EVM is kept minimal in order to avoid
-incorrect implementations which could cause consensus problems.
-All instructions operate on the basic data type, 256-bit words.
-The usual arithmetic, bit, logical and comparison operations are present.
-Conditional and unconditional jumps are possible. Furthermore,
-contracts can access relevant properties of the current block
-like its number and timestamp.
+EVM의 instruction 지합은 consensus 문제를 야기할 수 있는 잘못된 구현을 피하기 위해 최소한으로 유지한다.
+모든 instruction 256-bit words와 같은 기본적인 데이터 타입을 다룬다.
+일반적인 산술연산, 비트, 로직, 비교 연산 등이 제공된다
+조건, 무조건적 점프도 가능하다.
+게다가 컨트랙트는 현재 블록의 숫자와 타임스탬프와 같은 관련된 프로퍼티에 접근할 수 있다.
+
+.. The instruction set of the EVM is kept minimal in order to avoid
+.. incorrect implementations which could cause consensus problems.
+.. All instructions operate on the basic data type, 256-bit words.
+.. The usual arithmetic, bit, logical and comparison operations are present.
+.. Conditional and unconditional jumps are possible. Furthermore,
+.. contracts can access relevant properties of the current block
+.. like its number and timestamp.
 
 .. index:: ! message call, function;call
 
 Message Calls
 =============
 
-Contracts can call other contracts or send Ether to non-contract
-accounts by the means of message calls. Message calls are similar
-to transactions, in that they have a source, a target, data payload,
-Ether, gas and return data. In fact, every transaction consists of
-a top-level message call which in turn can create further message calls.
+컨트랙트는 메세지 호출을 통해 다른 컨트랙트를 호출하거나 비-컨트랙트 계정으로 이더를 보낼 수 있다.
+메세지 호출은 송신자, 수신자, 데이타 페이로드, 이더, 가스, 반환값을 가진다는 점에서 트랜잭션과 비슷하다.
+사실 모든 트랜잭션은 추가적인 메세지 호출을 차례대로 생성할 수 있는 최상위 메세지 호출로 구성된다.
 
-A contract can decide how much of its remaining **gas** should be sent
-with the inner message call and how much it wants to retain.
-If an out-of-gas exception happens in the inner call (or any
-other exception), this will be signalled by an error value put onto the stack.
-In this case, only the gas sent together with the call is used up.
-In Solidity, the calling contract causes a manual exception by default in
-such situations, so that exceptions "bubble up" the call stack.
+.. Contracts can call other contracts or send Ether to non-contract
+.. accounts by the means of message calls. Message calls are similar
+.. to transactions, in that they have a source, a target, data payload,
+.. Ether, gas and return data. In fact, every transaction consists of
+.. a top-level message call which in turn can create further message calls.
 
-As already said, the called contract (which can be the same as the caller)
-will receive a freshly cleared instance of memory and has access to the
-call payload - which will be provided in a separate area called the **calldata**.
-After it has finished execution, it can return data which will be stored at
-a location in the caller's memory preallocated by the caller.
+컨트랙트는 내부 메세지 호출을 통해 어느 정도의 잔여 갓를 보내고 얼마나 남길지 정할 수 있다.
+만약 내부 호출에서 가스 부족 예외와 같은 예외가 발생하면, stack위에 에러값이 추가되는 것으로 알 수 있다.
+이 경우 호출과 함께 전송된 가스만이 사용된다.
+solidity에서는 특정 상황에서 컨트랙트를 호출하면 기본값으로 수동 예외를 발생시키는데, 이로인해 call stack이 예외로 가득차게 된다.
 
-Calls are **limited** to a depth of 1024, which means that for more complex
-operations, loops should be preferred over recursive calls.
+.. A contract can decide how much of its remaining **gas** should be sent
+.. with the inner message call and how much it wants to retain.
+.. If an out-of-gas exception happens in the inner call (or any
+.. other exception), this will be signalled by an error value put onto the stack.
+.. In this case, only the gas sent together with the call is used up.
+.. In Solidity, the calling contract causes a manual exception by default in
+.. such situations, so that exceptions "bubble up" the call stack.
+
+이미 언급한 것 처럼 호출된 컨트랙트는 초기화된 메모리 인스턴스를 전달받아 **calldata** 라고 하는 분리된 영역에 있는
+call payload에 접근할 수 있는 권한을 가진다.
+실행이 끝나면 호출자의 할당된 메모ㄷ리에 반환값을 저장한다.
+.. As already said, the called contract (which can be the same as the caller)
+.. will receive a freshly cleared instance of memory and has access to the
+.. call payload - which will be provided in a separate area called the **calldata**.
+.. After it has finished execution, it can return data which will be stored at
+.. a location in the caller's memory preallocated by the caller.
+
+호출은 1024 깊이로 **제한**되어있으므로 복잡한 연산을 위해서는 재귀 호출보다는 루프를 추천한다.
+.. Calls are **limited** to a depth of 1024, which means that for more complex
+.. operations, loops should be preferred over recursive calls.
 
 .. index:: delegatecall, callcode, library
 
 Delegatecall / Callcode and Libraries
 =====================================
 
-There exists a special variant of a message call, named **delegatecall**
-which is identical to a message call apart from the fact that
-the code at the target address is executed in the context of the calling
-contract and ``msg.sender`` and ``msg.value`` do not change their values.
+**delegatecall**이라는 특수한 메세지 호출이 있다. 이것은 몇가지를 제외하면 메세지 호출과 동일하다.
+메세지 호출과 다른 점은 수신자 주소의 코드가 호출 컨트랙트의 컨텍스트에서 실행되고,
+``msg.sender`` 와 ``msg.value`` 값이 변하지 않는 다는 것이다.
 
-This means that a contract can dynamically load code from a different
-address at runtime. Storage, current address and balance still
-refer to the calling contract, only the code is taken from the called address.
+.. There exists a special variant of a message call, named **delegatecall**
+.. which is identical to a message call apart from the fact that
+.. the code at the target address is executed in the context of the calling
+.. contract and ``msg.sender`` and ``msg.value`` do not change their values.
 
-This makes it possible to implement the "library" feature in Solidity:
-Reusable library code that can be applied to a contract's storage, e.g. in
-order to  implement a complex data structure.
+이것은 컨트랙트가 런타임에 다른 주소에서 동적으로 코드를 가져올 수 있다는 것을 의미한다.
+Storage, 현재 주소와 잔고는 여전히 호출하는 컨트랙트를 가리키지만 오직 코드만이 호출된 주소로부터 가져오게 된다.
+
+.. This means that a contract can dynamically load code from a different
+.. address at runtime. Storage, current address and balance still
+.. refer to the calling contract, only the code is taken from the called address.
+
+이것이 solidity에서 라이브러리 기능 구현을 가능하게 한다.
+예를 들어 복잡한 구조체를 구현하기 위하여 컨트랙트의 storage에 재사용 가능한 라이브러리 코드를 적용할 수 있다.
+.. This makes it possible to implement the "library" feature in Solidity:
+.. Reusable library code that can be applied to a contract's storage, e.g. in
+.. order to  implement a complex data structure.
 
 .. index:: log
 
