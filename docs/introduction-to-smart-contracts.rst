@@ -202,7 +202,7 @@ a "블록체인 explorer" that tracks transactions and balances of your new coin
 블록체인 기초
 *****************
 
-블록체인이라는 개념은 프로그래머가 이해하기에는 어렵지 않다. 왜냐하면 대부분의 complications (mining, `hashing <https://en.wikipedia.org/wiki/Cryptographic_hash_function>`_, `elliptic-curve cryptography <https://en.wikipedia.org/wiki/Elliptic_curve_cryptography>`_, `peer-to-peer networks <https://en.wikipedia.org/wiki/Peer-to-peer>`_, etc.) 들은 기능과 약속들의 집합을 제공하기 위한 것 뿐이기 때문이다. 
+블록체인이라는 개념은 프로그래머가 이해하기에는 어렵지 않다. 왜냐하면 대부분의 complications (mining, `hashing <https://en.wikipedia.org/wiki/Cryptographic_hash_function>`_, `elliptic-curve cryptography <https://en.wikipedia.org/wiki/Elliptic_curve_cryptography>`_, `peer-to-peer networks <https://en.wikipedia.org/wiki/Peer-to-peer>`_, etc.) 들은 기능과 약속들의 집합을 제공하기 위한 것 뿐이기 때문이다.
 여러분이 이런 기능들을 받아들이기만 한다면, 그 밑에 깔린 기술에 대해서는 신경쓰지 않아도 무방하다. 아니면 당신은 아마존의 AWS를 사용하기 위해서 그것이 내부적으로 어떻게 동작하는지 알아야만 속이 풀리나?
 
 .. index:: transaction
@@ -222,7 +222,7 @@ a "블록체인 explorer" that tracks transactions and balances of your new coin
 
 게다가 트랜잭션은 트랜잭션 생성자, 송신측에 의해 항상 서명된다. 이것이 데이터베이스의 변조를 막는다(This makes it straightforward to guard access to specific modifications of the
 database.)
-전자화폐의 예에서 단순한 검증만으로도 계좌의 키를 가지고 있는 사람만이 돈을 이체할 수 있도록 보장한다. 
+전자화폐의 예에서 단순한 검증만으로도 계좌의 키를 가지고 있는 사람만이 돈을 이체할 수 있도록 보장한다.
 
 .. index:: ! block
 
@@ -232,16 +232,16 @@ database.)
 비트코인에서 한가지 장애물은 대체 "중복 결제 공격 ( double-spend attack )"이 뭐냐는 것이다.:
 동일한 네트워크에서 계정을 비워버리라는 두개의 트랜잭션이 존재할 때, 즉 충돌할 때 대체 무슨 일이 벌어지는가.
 
-간단한 대답은 여러분은 그것을 신경쓸 필요 없다는 것이다. 트랜잭션 순서는 여러분을 위해 선택되어, 해당 트랜잭션은 "블록"으로 감싸지고 모든 참여자 노드에서 실행되고 배포될 것이다. 
+간단한 대답은 여러분은 그것을 신경쓸 필요 없다는 것이다. 트랜잭션 순서는 여러분을 위해 선택되어, 해당 트랜잭션은 "블록"으로 감싸지고 모든 참여자 노드에서 실행되고 배포될 것이다.
 2개의 트랜잭션이 충돌한다면 두번째 트랜잭션은 거절되고 블록에 포함되지 않을 것이다.(If two transactions contradict each other, the one that ends up being second will
 be rejected and not become part of the block.)
 
 이 블록들은 시간이 지남에 따라 사슬처럼 연쇄적으로 연결되고, 이것이 블록체인이라고 부르는 이유다.
 블록은 일정 간격 ( 이더리움에서는 대충 17초마다 )마다 체인에 추가된다.
 
-채굴이라고 불리는 "order selection mechanism"에서는 
+채굴이라고 불리는 "order selection mechanism"에서는
 As part of the "order selection mechanism" (which is called "mining") it may happen that
-blocks are reverted from time to time, but only at the "tip" of the chain. 
+blocks are reverted from time to time, but only at the "tip" of the chain.
 
 The more blocks that are added on top, the less likely it is. So it might be that your transactions
 are reverted and even removed from the 블록체인, but the longer you wait, the less
@@ -269,13 +269,9 @@ Accounts
 ========
 
 이더리움에서는 Address 항목을 공유하는 두가지 종류의 계정이 있다. : **External accounts**는 공개키-개인키 쌍 ( 예를 들어 인간 )에 의해 제어되고, **contract accounts**는 계정 내부에 들어있는 코드에 의해서 제어된다.
-
 외부 계정의 주소는 공개키로 정해지는 데 반해 계약 계정의 주소는 계약이 생성될 때 정해진다. ( 이것은 생성자의주소와 그 주소로부터 발생한 트랜잭션의 횟수 - nonce - 에 의해 정해진다 )
-
 계정이 코드를 가지고 있던 그렇지 않던지 간에, EVM에서는 동일하게 다뤄진다.
-
 모든 계정은 **storage**라고 불리는 영구적인 256비트 words를 256비트 words로 맵핑하는 키-값 저장소를 가진다.
-
 게다가 모든 계정은 이더를 포함하는 트랜잭션을 보낼 때 수정될 수 있는 **balance** ( 이더, 정확히는 Wei )를 가지고 있다.
 
 .. index:: ! transaction
@@ -283,18 +279,16 @@ Accounts
 Transactions
 ============
 
-A transaction is a message that is sent from one account to another
-account (which might be the same or the special zero-account, see below).
-It can include binary data (its payload) and Ether.
+트랜잭션은 한 계정에서 다른 계정으로 보내는 메세지이다. 받는 계정이 보내는 계정과 동일하거나 zero-account일 수도 있는데 아래를 참고하라.
 
-If the target account contains code, that code is executed and
-the payload is provided as input data.
+만약 받는 계정이 코드를 포함하고 있다면 그 코드가 실행되고 payload는 입력 데이터로 제공된다.
 
-If the target account is the zero-account (the account with the
-address ``0``), the transaction creates a **new contract**.
-As already mentioned, the address of that contract is not
-the zero address but an address derived from the sender and
-its number of transactions sent (the "nonce"). The payload
+만약 받는 계정이 주소가 ``0``인 zero-account라면 트랜잭션은 **신규 컨트랙트**를 생성한다.
+이미 언급한 것 처럼, 그 컨트랙트의 주소는 ``0``이 아니고, 송신자와 트랜잭션이 보내진 횟수("nonce")로 정해진다.
+이런 컨트랙트 생성을 위한 트랜잭션의 payload는 EVM 코드로 변환되고 실행된다.
+실행 결과는 컨트랙트의 코드로 영구히 저장된다.
+즉, 컨트랙트를 생성하기 위해서, 여러분은 컨트랙트의 실제 코드를 보내는 것이 아니라 실제 코드를 반환하는 코드를 보내는 것이다.
+The payload
 of such a contract creation transaction is taken to be
 EVM bytecode and executed. The output of this execution is
 permanently stored as the code of the contract.
@@ -307,24 +301,27 @@ returns that code.
 Gas
 ===
 
-Upon creation, each transaction is charged with a certain amount of **gas**,
-whose purpose is to limit the amount of work that is needed to execute
-the transaction and to pay for this execution. While the EVM executes the
-transaction, the gas is gradually depleted according to specific rules.
+생성된 후에 각 트랜잭션은 일정한 양의 **gas**를 지불해야하는데, 이것은 트랜잭션을 실행하는데 필요한 일의 양을 제한하고,
+이 실행에 대한 비용을 지불하기 위함이다. EVM이 트랜잭션을 실행하는 동안 gas는 특정한 규칙에 따라서 점차적으로 감소한다.
+Upon creation, each transaction is charged with a certain amount of gas, whose purpose is to limit the amount of work that is needed to execute the transaction and to pay for this execution. While the EVM executes the transaction, the gas is gradually depleted according to specific rules.
 
-The **gas price** is a value set by the creator of the transaction, who
-has to pay ``gas_price * gas`` up front from the sending account.
-If some gas is left after the execution, it is refunded in the same way.
 
-If the gas is used up at any point (i.e. it is negative),
-an out-of-gas exception is triggered, which reverts all modifications
-made to the state in the current call frame.
+**gas price**는 ``gas_price * gas``를 송신 계정으로부터 선금으로 지불해야 하는 트랜잭션 생성자에 의해 정해진다.(?)
+만약 실행 이후에 gas가 남아있다면 동일한 방식으로 환불된다.
+The gas price is a value set by the creator of the transaction, who has to pay gas_price * gas up front from the sending account. If some gas is left after the execution, it is refunded in the same way.
+
+만약 gas가 어느 순간 소진되었다면, out-of-gas 예외가 발생하는데, 이는 현재 call frame에서 발생한 모든 변경 사항을 되돌린다.
+If the gas is used up at any point (i.e. it is negative), an out-of-gas exception is triggered, which reverts all modifications made to the state in the current call frame.
+
 
 .. index:: ! storage, ! memory, ! stack
 
 Storage, Memory and the Stack
 =============================
 
+각 계정은 **storage** 라는 영구 메모리 영역을 가진다. Storage는 256-bit words에서 256-bit words로 매핑되는 Key-value 쌍을 저장한다.
+컨트랙트 내부에서 storage 데이터를 하나하나 열거하는 것은 불가능하며,
+컨트랙트는 외부 storage를 읽거나 쓸 수 없다.
 Each account has a persistent memory area which is called **storage**.
 Storage is a key-value store that maps 256-bit words to 256-bit words.
 It is not possible to enumerate storage from within a contract
@@ -332,6 +329,8 @@ and it is comparatively costly to read and even more so, to modify
 storage. A contract can neither read nor write to any storage apart
 from its own.
 
+두번째 메모리 영역은 **memory**인데, 컨트랙트는 각 메세지 호출마다 초기화된 memory 인스턴스를 얻어온다.
+Memory는 연속적이며 (선형적이며) 바이트 레벨의 주소를 가지지만 쓰기가 8 bit 혹은 256 bit로 가능한데 반해, 읽기는 256 bit 단위로만 가능하다.
 The second memory area is called **memory**, of which a contract obtains
 a freshly cleared instance for each message call. Memory is linear and can be
 addressed at byte level, but reads are limited to a width of 256 bits, while writes

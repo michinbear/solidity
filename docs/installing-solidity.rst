@@ -82,7 +82,7 @@ If you want to use the cutting edge developer version:
     sudo add-apt-repository ppa:ethereum/ethereum-dev
     sudo apt-get update
     sudo apt-get install solc
-    
+
 We are also releasing a `snap package <https://snapcraft.io/>`_, which is installable in all the `supported Linux distros <https://snapcraft.io/docs/core/install>`_. To install the latest stable version of solc:
 
 .. code:: bash
@@ -114,13 +114,13 @@ We will re-add the pre-built bottles soon.
     brew install solidity
     brew linkapps solidity
 
-If you need a specific version of Solidity you can install a 
+If you need a specific version of Solidity you can install a
 Homebrew formula directly from Github.
 
-View 
+View
 `solidity.rb commits on Github <https://github.com/ethereum/homebrew-ethereum/commits/master/solidity.rb>`_.
 
-Follow the history links until you have a raw file link of a 
+Follow the history links until you have a raw file link of a
 specific commit of ``solidity.rb``.
 
 Install it using ``brew``:
@@ -242,7 +242,7 @@ Building Solidity is quite similar on Linux, macOS and other Unices:
 or even easier:
 
 .. code:: bash
-    
+
     #note: this will install binaries solc and soltest at usr/local/bin
     ./scripts/build.sh
 
