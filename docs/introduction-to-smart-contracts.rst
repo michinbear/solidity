@@ -454,36 +454,54 @@ Storage, 현재 주소와 잔고는 여전히 호출하는 컨트랙트를 가�
 Logs
 ====
 
-It is possible to store data in a specially indexed data structure
-that maps all the way up to the block level. This feature called **logs**
-is used by Solidity in order to implement **events**.
-Contracts cannot access log data after it has been created, but they
-can be efficiently accessed from outside the 블록체인.
-Since some part of the log data is stored in `bloom filters <https://en.wikipedia.org/wiki/Bloom_filter>`_, it is
-possible to search for this data in an efficient and cryptographically
-secure way, so network peers that do not download the whole 블록체인
-("light clients") can still find these logs.
+블록레벨까지 모두 맵핑되어 있는 특수한 열거형 데이터 구조체에 데이터를 저장할 수 있다.
+**logs** 라는 이 기능은 **events**를 구현하기 위해 Solidity에서 사용되었다.
+컨트랙트는 생성된 이후에는 로그 데이터에 접근할 수 없지만, 블록체인 밖에서는 효율적으로 접근할 수 있다.
+로그 데이터의 일부가 `bloom filters <https://en.wikipedia.org/wiki/Bloom_filter>`_에 저장되어 있는데,
+이 데이터를 효율적이고 cryptographically secure한 방법으로 검색할 수 있어서, 블록체인 전체를 다운로드받지 않은
+네트워크 피어 ( "light clients" )도 이 로그들을 검색할수 있다.
+
+.. It is possible to store data in a specially indexed data structure
+.. that maps all the way up to the block level. This feature called **logs**
+.. is used by Solidity in order to implement **events**.
+.. Contracts cannot access log data after it has been created, but they
+.. can be efficiently accessed from outside the 블록체인.
+.. Since some part of the log data is stored in `bloom filters <https://en.wikipedia.org/wiki/Bloom_filter>`_, it is
+.. possible to search for this data in an efficient and cryptographically
+.. secure way, so network peers that do not download the whole 블록체인
+.. ("light clients") can still find these logs.
 
 .. index:: contract creation
 
 Create
 ======
 
-Contracts can even create other contracts using a special opcode (i.e.
-they do not simply call the zero address). The only difference between
-these **create calls** and normal message calls is that the payload data is
-executed and the result stored as code and the caller / creator
-receives the address of the new contract on the stack.
+컨트랙트는 심지어 특수한 opcode를 이용해서 다른 컨트랙트를 생성할 수 있다.
+(i.e. they do not simply call the zero address).
+**create calls**와 일반 메세지 호출의 유일한 차이점은 페이로드 데이터가 실행되고 결과가 코드형태로 저장되며,
+호출자/생성자가 스택의 신규 컨트랙트의 주소를 받는 다는 점이다.
+
+
+.. Contracts can even create other contracts using a special opcode (i.e.
+.. they do not simply call the zero address). The only difference between
+.. these **create calls** and normal message calls is that the payload data is
+.. executed and the result stored as code and the caller / creator
+.. receives the address of the new contract on the stack.
 
 .. index:: selfdestruct
 
 Self-destruct
 =============
 
-The only possibility that code is removed from the 블록체인 is
-when a contract at that address performs the ``selfdestruct`` operation.
-The remaining Ether stored at that address is sent to a designated
-target and then the storage and code is removed from the state.
+블록체인에서 코드가 제거되는 것은 그 주소의 컨트랙트가 ``selfdestruct`` 를 수행했을 때 뿐이다.
+그 주소에 남아있는 이더는 designated target에게 본지고 storage와 코드가 state로부터 제거된다.
+
+.. The only possibility that code is removed from the 블록체인 is
+.. when a contract at that address performs the ``selfdestruct`` operation.
+.. The remaining Ether stored at that address is sent to a designated
+.. target and then the storage and code is removed from the state.
+
+
 
 .. warning:: Even if a contract's code does not contain a call to ``selfdestruct``,
   it can still perform that operation using ``delegatecall`` or ``callcode``.
